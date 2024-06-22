@@ -1,0 +1,72 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load the dataset
+file_path = '/content/Iris.csv'
+df = pd.read_csv(file_path)
+
+# Rename columns if necessary (assuming standard Iris dataset structure)
+df.columns = ['Id', 'SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm', 'Species']
+
+# Drop the 'Id' column as it is not needed for visualization
+df.drop(columns=['Id'], inplace=True)
+
+# Bar graph for average Sepal Length by Species
+plt.figure(figsize=(8, 6))
+sns.barplot(data=df, x='Species', y='SepalLengthCm', estimator='mean')
+plt.title('Average Sepal Length by Species')
+plt.xlabel('Species')
+plt.ylabel('Average Sepal Length (cm)')
+plt.show()
+
+# Line graph for Sepal Length over samples (separated by species)
+plt.figure(figsize=(12, 6))
+sns.lineplot(data=df, x=range(len(df)), y='SepalLengthCm', hue='Species')
+plt.title('Sepal Length Over Samples by Species')
+plt.xlabel('Sample Index')
+plt.ylabel('Sepal Length (cm)')
+plt.show()
+
+# Pie chart for distribution of species
+species_counts = df['Species'].value_counts()
+
+plt.figure(figsize=(8, 8))
+plt.pie(species_counts, labels=species_counts.index, autopct='%1.1f%%', startangle=140)
+plt.title('Distribution of Species')
+plt.show()
+
+# Scatter plot for Sepal Length vs. Sepal Width
+plt.figure(figsize=(8, 6))
+sns.scatterplot(data=df, x='SepalLengthCm', y='SepalWidthCm', hue='Species', style='Species')
+plt.title('Sepal Length vs. Sepal Width by Species')
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Sepal Width (cm)')
+plt.show()
+
+# Histogram for distribution of Sepal Length
+plt.figure(figsize=(8, 6))
+sns.histplot(data=df, x='SepalLengthCm', hue='Species', kde=True, element='step')
+plt.title('Distribution of Sepal Length by Species')
+plt.xlabel('Sepal Length (cm)')
+plt.ylabel('Frequency')
+plt.show()
+
+# Box plot for Sepal Length by Species
+plt.figure(figsize=(8, 6))
+sns.boxplot(data=df, x='Species', y='SepalLengthCm')
+plt.title('Box Plot of Sepal Length by Species')
+plt.xlabel('Species')
+plt.ylabel('Sepal Length (cm)')
+plt.show()
+
+# Calculate correlation matrix 
+# Select only numerical columns for correlation calculation
+numerical_df = df.select_dtypes(include=['float', 'int']) 
+correlation_matrix = numerical_df.corr() 
+
+# Heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', linewidths=0.5)
+plt.title('Heatmap of Feature Correlations')
+plt.show()
